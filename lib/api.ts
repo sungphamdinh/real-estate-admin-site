@@ -1,6 +1,6 @@
 import { PaginatedProperties, Property, PropertyInput } from "./types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://139.59.232.15";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://139-59-232-15.sslip.io";
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, options);
