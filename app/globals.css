@@ -1,0 +1,31 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-be-vietnam-pro), sans-serif;
+  color: oklch(0.22 0.01 250);
+  background: oklch(0.985 0.002 250);
+}
+
+a {
+  color: #1d4ed8;
+  text-decoration: none;
+}
+a:hover {
+  color: #16307a;
+}
+
+select,
+input,
+button,
+textarea {
+  font-family: var(--font-be-vietnam-pro), sans-serif;
+}
+
+:root {
+  --accent: #1d4ed8;
+  --accent-dark: #1d4ed8;
+}
