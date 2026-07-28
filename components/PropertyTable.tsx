@@ -88,7 +88,7 @@ export default function PropertyTable() {
               <td style={{ padding: "10px 16px", color: "var(--accent)", fontWeight: 700 }}>{formatPrice(p.price)}</td>
               <td style={{ padding: "10px 16px", color: "oklch(0.5 0.01 250)", maxWidth: 260 }}>{p.address}</td>
               <td style={{ padding: "10px 16px", whiteSpace: "nowrap" }}>
-                <Link href={`/properties/${p.id}/edit`} style={{ color: "var(--accent)", fontWeight: 700, marginRight: 14 }}>
+                <Link href={`/properties/edit?id=${p.id}`} style={{ color: "var(--accent)", fontWeight: 700, marginRight: 14 }}>
                   Sửa
                 </Link>
                 <button
