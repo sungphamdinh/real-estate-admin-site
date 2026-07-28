@@ -7,8 +7,8 @@ import { useAuth } from "@/lib/auth";
 export default function LoginPage() {
   const { login, token, hydrated } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@admin.com");
+  const [password, setPassword] = useState("admin1234");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
