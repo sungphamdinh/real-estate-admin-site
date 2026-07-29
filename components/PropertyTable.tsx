@@ -8,12 +8,20 @@ import { categoryLabel, formatPrice } from "@/lib/format";
 import { deleteProperty, fetchProperties } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
-export default function PropertyTable() {
+export default function PropertyTable({
+  onCountChange,
+}: {
+  onCountChange?: (count: number) => void;
+}) {
   const { token } = useAuth();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    onCountChange?.(properties.length);
+  }, [properties, onCountChange]);
 
   const load = useCallback(async () => {
     setLoading(true);

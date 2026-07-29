@@ -121,7 +121,21 @@ export default function PropertyForm({
 
       <div style={fieldWrapStyle}>
         <label style={labelStyle}>Giá (VNĐ)</label>
-        <input type="number" style={fieldStyle} value={price} onChange={(e) => setPrice(e.target.value)} required />
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <input
+            type="text"
+            inputMode="numeric"
+            style={fieldStyle}
+            value={price === "" ? "" : Number(price).toLocaleString("en-US")}
+            onChange={(e) => setPrice(e.target.value.replace(/[^\d]/g, ""))}
+            required
+          />
+          {price !== "" && (
+            <span style={{ fontSize: 13, color: "oklch(0.55 0.01 250)", whiteSpace: "nowrap" }}>
+              ≈ {(Number(price) / 1_000_000_000).toLocaleString("vi-VN", { maximumFractionDigits: 2 })} Tỷ
+            </span>
+          )}
+        </div>
       </div>
 
       <div style={fieldWrapStyle}>

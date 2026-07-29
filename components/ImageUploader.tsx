@@ -15,6 +15,8 @@ export default function ImageUploader({
   const { token } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
 
   async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
@@ -41,6 +43,14 @@ export default function ImageUploader({
     onChange(images.filter((img) => img !== url));
   }
 
+  function moveImage(from: number, to: number) {
+    if (from === to) return;
+    const next = [...images];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
+  }
+
   return (
     <div>
       <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={uploading} />
@@ -58,18 +68,39 @@ export default function ImageUploader({
             marginTop: 12,
           }}
         >
-          {images.map((url) => (
+          {images.map((url, index) => (
             <div
               key={url}
+              draggable
+              onDragStart={() => setDragIndex(index)}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (index !== overIndex) setOverIndex(index);
+              }}
+              onDragLeave={() => setOverIndex((cur) => (cur === index ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (dragIndex !== null) moveImage(dragIndex, index);
+                setDragIndex(null);
+                setOverIndex(null);
+              }}
+              onDragEnd={() => {
+                setDragIndex(null);
+                setOverIndex(null);
+              }}
               style={{
                 position: "relative",
                 aspectRatio: "1/1",
                 borderRadius: 8,
                 overflow: "hidden",
-                border: "1px solid oklch(0.85 0.01 250)",
+                border: overIndex === index && dragIndex !== index
+                  ? "2px dashed var(--accent)"
+                  : "1px solid oklch(0.85 0.01 250)",
+                opacity: dragIndex === index ? 0.4 : 1,
+                cursor: "grab",
               }}
             >
-              <Image src={url} alt="" fill style={{ objectFit: "cover" }} sizes="90px" />
+              <Image src={url} alt="" fill style={{ objectFit: "cover" }} sizes="90px" draggable={false} />
               <button
                 type="button"
                 onClick={() => removeImage(url)}
