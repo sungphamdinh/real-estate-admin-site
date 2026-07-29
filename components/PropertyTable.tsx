@@ -91,7 +91,11 @@ export default function PropertyTable({
                   {p.images[0] && <Image src={p.images[0]} alt="" fill style={{ objectFit: "cover" }} sizes="56px" />}
                 </div>
               </td>
-              <td style={{ padding: "10px 16px", fontWeight: 600, maxWidth: 260 }}>{p.title}</td>
+              <td style={{ padding: "10px 16px", fontWeight: 600, maxWidth: 260 }}>
+                <Link href={`/properties/edit?id=${p.id}`} style={{ color: "inherit" }}>
+                  {p.title}
+                </Link>
+              </td>
               <td style={{ padding: "10px 16px" }}>{categoryLabel(p.category)}</td>
               <td style={{ padding: "10px 16px", color: "var(--accent)", fontWeight: 700 }}>{formatPrice(p.price)}</td>
               <td style={{ padding: "10px 16px", color: "oklch(0.5 0.01 250)", maxWidth: 260 }}>{p.address}</td>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Property, PropertyCategory, PropertyInput } from "@/lib/types";
 import ImageUploader from "./ImageUploader";
+import EasyMDEEditor from "./EasyMDEEditor";
 
 const CATEGORY_OPTIONS: { value: PropertyCategory; label: string }[] = [
   { value: "NHA_PHO", label: "Nhà phố" },
@@ -97,11 +98,7 @@ export default function PropertyForm({
 
       <div style={fieldWrapStyle}>
         <label style={labelStyle}>Mô tả</label>
-        <textarea
-          style={{ ...fieldStyle, height: 100, padding: 12 }}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <EasyMDEEditor initialValue={description} onChange={setDescription} />
       </div>
 
       <div style={fieldWrapStyle}>
