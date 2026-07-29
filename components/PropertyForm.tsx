@@ -58,6 +58,9 @@ export default function PropertyForm({
     initial?.recognizedArea != null ? String(initial.recognizedArea) : ""
   );
   const [floorArea, setFloorArea] = useState(initial?.floorArea != null ? String(initial.floorArea) : "");
+  const [legalVerified, setLegalVerified] = useState(initial?.legalVerified ?? false);
+  const [completionVerified, setCompletionVerified] = useState(initial?.completionVerified ?? false);
+  const [bankSupport, setBankSupport] = useState(initial?.bankSupport ?? false);
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -83,6 +86,9 @@ export default function PropertyForm({
         direction,
         recognizedArea: recognizedArea === "" ? undefined : Number(recognizedArea),
         floorArea: floorArea === "" ? undefined : Number(floorArea),
+        legalVerified,
+        completionVerified,
+        bankSupport,
         contact: DEFAULT_CONTACT,
       });
     } catch (err) {
@@ -130,18 +136,8 @@ export default function PropertyForm({
       </div>
 
       <div style={fieldWrapStyle}>
-        <label style={labelStyle}>Loại hình</label>
-        <select
-          style={fieldStyle}
-          value={category}
-          onChange={(e) => setCategory(e.target.value as PropertyCategory)}
-        >
-          {CATEGORY_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
+        <label style={labelStyle}>Địa chỉ</label>
+        <input style={fieldStyle} value={address} onChange={(e) => setAddress(e.target.value)} required />
       </div>
 
       <div style={fieldWrapStyle}>
@@ -163,12 +159,21 @@ export default function PropertyForm({
         </div>
       </div>
 
-      <div style={fieldWrapStyle}>
-        <label style={labelStyle}>Địa chỉ</label>
-        <input style={fieldStyle} value={address} onChange={(e) => setAddress(e.target.value)} required />
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 16 }}>
+        <div>
+          <label style={labelStyle}>Loại hình</label>
+          <select
+            style={fieldStyle}
+            value={category}
+            onChange={(e) => setCategory(e.target.value as PropertyCategory)}
+          >
+            {CATEGORY_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <div>
           <label style={labelStyle}>Giấy tờ pháp lý</label>
           <select
@@ -199,70 +204,129 @@ export default function PropertyForm({
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
-        <div>
-          <label style={labelStyle}>Diện tích công nhận (m²)</label>
-          <input
-            type="number"
-            style={fieldStyle}
-            value={recognizedArea}
-            onChange={(e) => setRecognizedArea(e.target.value)}
-          />
-        </div>
-        <div>
-          <label style={labelStyle}>Diện tích sàn (m²)</label>
-          <input type="number" style={fieldStyle} value={floorArea} onChange={(e) => setFloorArea(e.target.value)} />
-        </div>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
-        <div>
-          <label style={labelStyle}>Chiều rộng (m)</label>
-          <input type="number" style={fieldStyle} value={width} onChange={(e) => setWidth(e.target.value)} required />
-        </div>
-        <div>
-          <label style={labelStyle}>Chiều dài (m)</label>
-          <input
-            type="number"
-            style={fieldStyle}
-            value={length}
-            onChange={(e) => setLength(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label style={labelStyle}>Số tầng</label>
-          <input
-            type="number"
-            style={fieldStyle}
-            value={floors}
-            onChange={(e) => setFloors(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label style={labelStyle}>Phòng ngủ</label>
-          <input
-            type="number"
-            style={fieldStyle}
-            value={bedrooms}
-            onChange={(e) => setBedrooms(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label style={labelStyle}>Phòng tắm</label>
-          <input
-            type="number"
-            style={fieldStyle}
-            value={bathrooms}
-            onChange={(e) => setBathrooms(e.target.value)}
-            required
-          />
+      <div
+        style={{
+          borderTop: "1px solid oklch(0.9 0.005 250)",
+          paddingTop: 16,
+          marginBottom: 16,
+        }}
+      >
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div>
+            <label style={labelStyle}>Diện tích công nhận (m²)</label>
+            <input
+              type="number"
+              style={fieldStyle}
+              value={recognizedArea}
+              onChange={(e) => setRecognizedArea(e.target.value)}
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Diện tích sàn (m²)</label>
+            <input
+              type="number"
+              style={fieldStyle}
+              value={floorArea}
+              onChange={(e) => setFloorArea(e.target.value)}
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Chiều dài (m)</label>
+            <input
+              type="number"
+              style={fieldStyle}
+              value={length}
+              onChange={(e) => setLength(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Chiều rộng (m)</label>
+            <input
+              type="number"
+              style={fieldStyle}
+              value={width}
+              onChange={(e) => setWidth(e.target.value)}
+              required
+            />
+          </div>
         </div>
       </div>
 
-      <div style={fieldWrapStyle}>
+      <div
+        style={{
+          borderTop: "1px solid oklch(0.9 0.005 250)",
+          paddingTop: 16,
+          marginBottom: 16,
+        }}
+      >
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+          <div>
+            <label style={labelStyle}>Số tầng</label>
+            <input
+              type="number"
+              style={fieldStyle}
+              value={floors}
+              onChange={(e) => setFloors(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Phòng ngủ</label>
+            <input
+              type="number"
+              style={fieldStyle}
+              value={bedrooms}
+              onChange={(e) => setBedrooms(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Phòng tắm</label>
+            <input
+              type="number"
+              style={fieldStyle}
+              value={bathrooms}
+              onChange={(e) => setBathrooms(e.target.value)}
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          borderTop: "1px solid oklch(0.9 0.005 250)",
+          paddingTop: 16,
+          marginBottom: 16,
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+        }}
+      >
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+          <input
+            type="checkbox"
+            checked={legalVerified}
+            onChange={(e) => setLegalVerified(e.target.checked)}
+          />
+          Pháp lý
+        </label>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+          <input
+            type="checkbox"
+            checked={completionVerified}
+            onChange={(e) => setCompletionVerified(e.target.checked)}
+          />
+          Hoàn công
+        </label>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+          <input type="checkbox" checked={bankSupport} onChange={(e) => setBankSupport(e.target.checked)} />
+          Hỗ trợ Bank (thẩm định, định giá, vay vốn, v.v.)
+        </label>
+      </div>
+
+      <div style={{ ...fieldWrapStyle, borderTop: "1px solid oklch(0.9 0.005 250)", paddingTop: 16 }}>
         <label style={labelStyle}>Liên hệ</label>
         <input
           style={{
