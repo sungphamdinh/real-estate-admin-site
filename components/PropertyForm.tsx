@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Property, PropertyCategory, PropertyInput } from "@/lib/types";
+import { HouseDirection, LegalDocument, Property, PropertyCategory, PropertyInput } from "@/lib/types";
 import ImageUploader from "./ImageUploader";
 import EasyMDEEditor from "./EasyMDEEditor";
 
@@ -11,6 +11,25 @@ const CATEGORY_OPTIONS: { value: PropertyCategory; label: string }[] = [
   { value: "CAN_HO", label: "Căn hộ" },
   { value: "BIET_THU", label: "Biệt thự" },
   { value: "DAT_NEN", label: "Đất nền" },
+];
+
+const LEGAL_DOCUMENT_OPTIONS: { value: LegalDocument; label: string }[] = [
+  { value: "SO_DO_SO_HONG", label: "Sổ đỏ/ Sổ hồng" },
+  { value: "HOP_DONG_MUA_BAN", label: "Hợp đồng mua bán" },
+  { value: "DANG_CHO_SO", label: "Đang chờ sổ" },
+];
+
+const DEFAULT_CONTACT = "096 8798839";
+
+const DIRECTION_OPTIONS: { value: HouseDirection; label: string }[] = [
+  { value: "DONG", label: "Đông" },
+  { value: "TAY", label: "Tây" },
+  { value: "NAM", label: "Nam" },
+  { value: "BAC", label: "Bắc" },
+  { value: "DONG_BAC", label: "Đông Bắc" },
+  { value: "TAY_BAC", label: "Tây Bắc" },
+  { value: "TAY_NAM", label: "Tây Nam" },
+  { value: "DONG_NAM", label: "Đông Nam" },
 ];
 
 export default function PropertyForm({
@@ -33,7 +52,12 @@ export default function PropertyForm({
   const [floors, setFloors] = useState(initial?.floors != null ? String(initial.floors) : "");
   const [bedrooms, setBedrooms] = useState(initial?.bedrooms != null ? String(initial.bedrooms) : "");
   const [bathrooms, setBathrooms] = useState(initial?.bathrooms != null ? String(initial.bathrooms) : "");
-  const [contact, setContact] = useState(initial?.contact ?? "");
+  const [legalDocument, setLegalDocument] = useState<LegalDocument>(initial?.legalDocument ?? "SO_DO_SO_HONG");
+  const [direction, setDirection] = useState<HouseDirection>(initial?.direction ?? "DONG");
+  const [recognizedArea, setRecognizedArea] = useState(
+    initial?.recognizedArea != null ? String(initial.recognizedArea) : ""
+  );
+  const [floorArea, setFloorArea] = useState(initial?.floorArea != null ? String(initial.floorArea) : "");
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,7 +79,11 @@ export default function PropertyForm({
         bedrooms: Number(bedrooms) || 0,
         bathrooms: Number(bathrooms) || 0,
         images,
-        contact: contact || undefined,
+        legalDocument,
+        direction,
+        recognizedArea: recognizedArea === "" ? undefined : Number(recognizedArea),
+        floorArea: floorArea === "" ? undefined : Number(floorArea),
+        contact: DEFAULT_CONTACT,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đã có lỗi xảy ra");
@@ -142,6 +170,53 @@ export default function PropertyForm({
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
         <div>
+          <label style={labelStyle}>Giấy tờ pháp lý</label>
+          <select
+            style={fieldStyle}
+            value={legalDocument}
+            onChange={(e) => setLegalDocument(e.target.value as LegalDocument)}
+          >
+            {LEGAL_DOCUMENT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label style={labelStyle}>Hướng nhà</label>
+          <select
+            style={fieldStyle}
+            value={direction}
+            onChange={(e) => setDirection(e.target.value as HouseDirection)}
+          >
+            {DIRECTION_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+        <div>
+          <label style={labelStyle}>Diện tích công nhận (m²)</label>
+          <input
+            type="number"
+            style={fieldStyle}
+            value={recognizedArea}
+            onChange={(e) => setRecognizedArea(e.target.value)}
+          />
+        </div>
+        <div>
+          <label style={labelStyle}>Diện tích sàn (m²)</label>
+          <input type="number" style={fieldStyle} value={floorArea} onChange={(e) => setFloorArea(e.target.value)} />
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+        <div>
           <label style={labelStyle}>Chiều rộng (m)</label>
           <input type="number" style={fieldStyle} value={width} onChange={(e) => setWidth(e.target.value)} required />
         </div>
@@ -189,7 +264,16 @@ export default function PropertyForm({
 
       <div style={fieldWrapStyle}>
         <label style={labelStyle}>Liên hệ</label>
-        <input style={fieldStyle} value={contact} onChange={(e) => setContact(e.target.value)} />
+        <input
+          style={{
+            ...fieldStyle,
+            width: "fit-content",
+            background: "oklch(0.97 0.005 250)",
+            color: "oklch(0.5 0.01 250)",
+          }}
+          value={DEFAULT_CONTACT}
+          disabled
+        />
       </div>
 
       <div style={fieldWrapStyle}>

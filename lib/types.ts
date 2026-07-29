@@ -1,5 +1,17 @@
 export type PropertyCategory = "NHA_PHO" | "CAN_HO" | "BIET_THU" | "DAT_NEN";
 
+export type LegalDocument = "SO_DO_SO_HONG" | "HOP_DONG_MUA_BAN" | "DANG_CHO_SO";
+
+export type HouseDirection =
+  | "DONG"
+  | "TAY"
+  | "NAM"
+  | "BAC"
+  | "DONG_BAC"
+  | "TAY_BAC"
+  | "TAY_NAM"
+  | "DONG_NAM";
+
 export interface Property {
   id: string;
   title: string;
@@ -13,6 +25,10 @@ export interface Property {
   bedrooms: number | null;
   bathrooms: number | null;
   images: string[];
+  legalDocument: LegalDocument | null;
+  direction: HouseDirection | null;
+  recognizedArea: number | null;
+  floorArea: number | null;
   contact: string | null;
   createdAt: string;
   updatedAt: string;
@@ -30,6 +46,10 @@ export interface PropertyInput {
   bedrooms: number;
   bathrooms: number;
   images?: string[];
+  legalDocument?: LegalDocument;
+  direction?: HouseDirection;
+  recognizedArea?: number;
+  floorArea?: number;
   contact?: string;
 }
 
