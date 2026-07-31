@@ -153,6 +153,13 @@ export default function PropertyForm({
       </div>
 
       <div style={fieldWrapStyle}>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+          <input type="checkbox" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} />
+          Tin nổi bật
+        </label>
+      </div>
+
+      <div style={fieldWrapStyle}>
         <label style={labelStyle}>Mô tả</label>
         <EasyMDEEditor initialValue={description} onChange={setDescription} />
       </div>
@@ -345,10 +352,6 @@ export default function PropertyForm({
         <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
           <input type="checkbox" checked={bankSupport} onChange={(e) => setBankSupport(e.target.checked)} />
           Hỗ trợ Bank (thẩm định, định giá, vay vốn, v.v.)
-        </label>
-        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
-          <input type="checkbox" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} />
-          Tin nổi bật
         </label>
       </div>
 
