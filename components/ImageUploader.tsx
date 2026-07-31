@@ -14,29 +14,50 @@ export default function ImageUploader({
 }) {
   const { token } = useAuth();
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
 
   async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files;
+    const input = e.target;
+    const files = input.files;
     if (!files || files.length === 0 || !token) return;
 
+    const fileList = Array.from(files);
     setUploading(true);
     setError(null);
-    try {
-      const uploaded: string[] = [];
-      for (const file of Array.from(files)) {
-        const url = await uploadImage(token, file);
-        uploaded.push(url);
+    setProgress({ done: 0, total: fileList.length });
+
+    // Uploaded one at a time (not Promise.all) so files land in the order
+    // they were selected. Each success is committed to the parent's state
+    // immediately, and a failure only skips that one file, so a bad file
+    // partway through a large batch doesn't discard everything already
+    // uploaded or block the rest of the batch.
+    let current = images;
+    const failures: string[] = [];
+    for (let i = 0; i < fileList.length; i++) {
+      try {
+        const url = await uploadImage(token, fileList[i]);
+        current = [...current, url];
+        onChange(current);
+      } catch (err) {
+        failures.push(err instanceof Error ? err.message : fileList[i].name);
+      } finally {
+        setProgress({ done: i + 1, total: fileList.length });
       }
-      onChange([...images, ...uploaded]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Tải ảnh thất bại");
-    } finally {
-      setUploading(false);
-      e.target.value = "";
     }
+
+    if (failures.length > 0) {
+      setError(
+        failures.length === 1
+          ? `1 ảnh tải lên thất bại: ${failures[0]}`
+          : `${failures.length} ảnh tải lên thất bại`
+      );
+    }
+    setUploading(false);
+    setProgress(null);
+    input.value = "";
   }
 
   function removeImage(url: string) {
@@ -55,7 +76,9 @@ export default function ImageUploader({
     <div>
       <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={uploading} />
       {uploading && (
-        <div style={{ fontSize: 13, color: "oklch(0.5 0.01 250)", marginTop: 6 }}>Đang tải ảnh lên...</div>
+        <div style={{ fontSize: 13, color: "oklch(0.5 0.01 250)", marginTop: 6 }}>
+          {progress ? `Đang tải ${progress.done}/${progress.total} ảnh...` : "Đang tải ảnh lên..."}
+        </div>
       )}
       {error && <div style={{ fontSize: 13, color: "#dc2626", marginTop: 6 }}>{error}</div>}
 
