@@ -77,3 +77,15 @@ export interface BaseResponse<T> {
   message: string;
   data: T;
 }
+
+export interface ConsignmentLead {
+  id: string;
+  category: PropertyCategory;
+  district: string;
+  area: number;
+  price: number | null;
+  description: string | null;
+  fullName: string;
+  phone: string;
+  createdAt: string;
+}

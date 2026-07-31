@@ -1,4 +1,4 @@
-import { PaginatedProperties, Property, PropertyInput } from "./types";
+import { ConsignmentLead, PaginatedProperties, Property, PropertyInput } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://139-59-232-15.sslip.io";
 
@@ -60,6 +60,19 @@ export async function updateProperty(
 
 export async function deleteProperty(token: string, id: string): Promise<void> {
   await request<Property>(`/properties/${id}`, {
+    method: "DELETE",
+    headers: authHeaders(token),
+  });
+}
+
+export async function fetchConsignmentLeads(token: string): Promise<ConsignmentLead[]> {
+  return request<ConsignmentLead[]>("/consignments", {
+    headers: authHeaders(token),
+  });
+}
+
+export async function deleteConsignmentLead(token: string, id: string): Promise<void> {
+  await request<ConsignmentLead>(`/consignments/${id}`, {
     method: "DELETE",
     headers: authHeaders(token),
   });

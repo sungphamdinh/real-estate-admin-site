@@ -23,6 +23,14 @@ export default function AdminHeader() {
         <Link href="/properties" style={{ fontWeight: 800, fontSize: 16, color: "inherit" }}>
           Quản trị Bất động sản
         </Link>
+        <nav style={{ display: "flex", gap: 20, alignItems: "center" }}>
+          <Link href="/properties" style={{ fontSize: 14, fontWeight: 700, color: "oklch(0.35 0.01 250)" }}>
+            Bất động sản
+          </Link>
+          <Link href="/consignments" style={{ fontSize: 14, fontWeight: 700, color: "oklch(0.35 0.01 250)" }}>
+            Ký gửi
+          </Link>
+        </nav>
         <button
           onClick={logout}
           style={{
