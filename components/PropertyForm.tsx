@@ -69,6 +69,7 @@ export default function PropertyForm({
   const [legalVerified, setLegalVerified] = useState(initial?.legalVerified ?? false);
   const [completionVerified, setCompletionVerified] = useState(initial?.completionVerified ?? false);
   const [bankSupport, setBankSupport] = useState(initial?.bankSupport ?? false);
+  const [isFeatured, setIsFeatured] = useState(initial?.isFeatured ?? false);
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,6 +99,7 @@ export default function PropertyForm({
         legalVerified,
         completionVerified,
         bankSupport,
+        isFeatured,
         contact: DEFAULT_CONTACT,
       });
     } catch (err) {
@@ -343,6 +345,10 @@ export default function PropertyForm({
         <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
           <input type="checkbox" checked={bankSupport} onChange={(e) => setBankSupport(e.target.checked)} />
           Hỗ trợ Bank (thẩm định, định giá, vay vốn, v.v.)
+        </label>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+          <input type="checkbox" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} />
+          Tin nổi bật
         </label>
       </div>
 
