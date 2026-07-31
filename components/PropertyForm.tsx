@@ -7,10 +7,10 @@ import ImageUploader from "./ImageUploader";
 import EasyMDEEditor from "./EasyMDEEditor";
 
 const CATEGORY_OPTIONS: { value: PropertyCategory; label: string }[] = [
-  { value: "NHA_PHO", label: "Nhà phố" },
-  { value: "CAN_HO", label: "Căn hộ" },
-  { value: "BIET_THU", label: "Biệt thự" },
+  { value: "MAT_TIEN", label: "Mặt tiền" },
+  { value: "HEM", label: "Đường Hẻm" },
   { value: "DAT_NEN", label: "Đất nền" },
+  { value: "CAN_HO", label: "Căn hộ" },
 ];
 
 const LEGAL_DOCUMENT_OPTIONS: { value: LegalDocument; label: string }[] = [
@@ -44,7 +44,7 @@ export default function PropertyForm({
   const router = useRouter();
   const [title, setTitle] = useState(initial?.title ?? "");
   const [description, setDescription] = useState(initial?.description ?? "");
-  const [category, setCategory] = useState<PropertyCategory>(initial?.category ?? "NHA_PHO");
+  const [category, setCategory] = useState<PropertyCategory>(initial?.category ?? "MAT_TIEN");
   const [price, setPrice] = useState(initial ? String(initial.price) : "");
   const [address, setAddress] = useState(initial?.address ?? "");
   const [width, setWidth] = useState(initial?.width != null ? String(initial.width) : "");

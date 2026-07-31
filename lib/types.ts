@@ -1,4 +1,4 @@
-export type PropertyCategory = "NHA_PHO" | "CAN_HO" | "BIET_THU" | "DAT_NEN";
+export type PropertyCategory = "MAT_TIEN" | "HEM" | "CAN_HO" | "DAT_NEN";
 
 export type LegalDocument = "SO_DO_SO_HONG" | "HOP_DONG_MUA_BAN" | "DANG_CHO_SO";
 

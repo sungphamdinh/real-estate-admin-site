@@ -1,9 +1,9 @@
 import { Property } from "./types";
 
 const CATEGORY_LABELS: Record<Property["category"], string> = {
-  NHA_PHO: "Nhà phố",
+  MAT_TIEN: "Mặt tiền",
+  HEM: "Đường Hẻm",
   CAN_HO: "Căn hộ",
-  BIET_THU: "Biệt thự",
   DAT_NEN: "Đất nền",
 };
 
