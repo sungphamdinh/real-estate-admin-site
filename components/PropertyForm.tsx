@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { HouseDirection, LegalDocument, Property, PropertyCategory, PropertyInput } from "@/lib/types";
+import { HouseDirection, LegalDocument, Property, PropertyCategory, PropertyInput, PropertyStatus } from "@/lib/types";
 import ImageUploader from "./ImageUploader";
 import EasyMDEEditor from "./EasyMDEEditor";
 
@@ -11,6 +11,13 @@ const CATEGORY_OPTIONS: { value: PropertyCategory; label: string }[] = [
   { value: "HEM", label: "Đường Hẻm" },
   { value: "DAT_NEN", label: "Đất nền" },
   { value: "CAN_HO", label: "Căn hộ" },
+];
+
+const STATUS_OPTIONS: { value: PropertyStatus; label: string }[] = [
+  { value: "DANG_BAN", label: "Đang bán" },
+  { value: "DANG_GIAO_DICH", label: "Đang giao dịch" },
+  { value: "DA_COC", label: "Đã cọc" },
+  { value: "DA_BAN", label: "Đã bán" },
 ];
 
 const LEGAL_DOCUMENT_OPTIONS: { value: LegalDocument; label: string }[] = [
@@ -45,6 +52,7 @@ export default function PropertyForm({
   const [title, setTitle] = useState(initial?.title ?? "");
   const [description, setDescription] = useState(initial?.description ?? "");
   const [category, setCategory] = useState<PropertyCategory>(initial?.category ?? "MAT_TIEN");
+  const [status, setStatus] = useState<PropertyStatus>(initial?.status ?? "DANG_BAN");
   const [price, setPrice] = useState(initial ? String(initial.price) : "");
   const [address, setAddress] = useState(initial?.address ?? "");
   const [width, setWidth] = useState(initial?.width != null ? String(initial.width) : "");
@@ -74,6 +82,7 @@ export default function PropertyForm({
         title,
         description: description || undefined,
         category,
+        status,
         price: Number(price) || 0,
         address,
         width: Number(width) || 0,
@@ -128,6 +137,17 @@ export default function PropertyForm({
       <div style={fieldWrapStyle}>
         <label style={labelStyle}>Tiêu đề</label>
         <input style={fieldStyle} value={title} onChange={(e) => setTitle(e.target.value)} required />
+      </div>
+
+      <div style={fieldWrapStyle}>
+        <label style={labelStyle}>Trạng thái</label>
+        <select style={fieldStyle} value={status} onChange={(e) => setStatus(e.target.value as PropertyStatus)}>
+          {STATUS_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div style={fieldWrapStyle}>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Property } from "@/lib/types";
-import { categoryLabel, formatPrice } from "@/lib/format";
+import { categoryLabel, formatPrice, statusColor, statusLabel } from "@/lib/format";
 import { deleteProperty, fetchProperties } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
@@ -167,6 +167,7 @@ export default function PropertyTable({
             <th style={{ padding: "12px 16px" }}>Loại hình</th>
             <th style={{ padding: "12px 16px" }}>Giá</th>
             <th style={{ padding: "12px 16px" }}>Địa chỉ</th>
+            <th style={{ padding: "12px 16px" }}>Trạng thái</th>
             <th style={{ padding: "12px 16px" }}></th>
           </tr>
         </thead>
@@ -210,6 +211,22 @@ export default function PropertyTable({
               <td style={{ padding: "10px 16px" }}>{categoryLabel(p.category)}</td>
               <td style={{ padding: "10px 16px", color: "var(--accent)", fontWeight: 700 }}>{formatPrice(p.price)}</td>
               <td style={{ padding: "10px 16px", color: "oklch(0.5 0.01 250)", maxWidth: 260 }}>{p.address}</td>
+              <td style={{ padding: "10px 16px" }}>
+                <span
+                  style={{
+                    display: "inline-block",
+                    padding: "3px 10px",
+                    borderRadius: 999,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    whiteSpace: "nowrap",
+                    background: statusColor(p.status).bg,
+                    color: statusColor(p.status).fg,
+                  }}
+                >
+                  {statusLabel(p.status)}
+                </span>
+              </td>
               <td style={{ padding: "10px 16px", whiteSpace: "nowrap" }}>
                 <Link href={`/properties/edit?id=${p.id}`} style={{ color: "var(--accent)", fontWeight: 700, marginRight: 14 }}>
                   Sửa

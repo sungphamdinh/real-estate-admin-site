@@ -1,5 +1,7 @@
 export type PropertyCategory = "MAT_TIEN" | "HEM" | "CAN_HO" | "DAT_NEN";
 
+export type PropertyStatus = "DANG_BAN" | "DANG_GIAO_DICH" | "DA_COC" | "DA_BAN";
+
 export type LegalDocument = "SO_DO_SO_HONG" | "HOP_DONG_MUA_BAN" | "DANG_CHO_SO";
 
 export type HouseDirection =
@@ -17,6 +19,7 @@ export interface Property {
   title: string;
   description: string | null;
   category: PropertyCategory;
+  status: PropertyStatus;
   price: number;
   address: string;
   width: number | null;
@@ -41,6 +44,7 @@ export interface PropertyInput {
   title: string;
   description?: string;
   category: PropertyCategory;
+  status?: PropertyStatus;
   price: number;
   address: string;
   width: number;
